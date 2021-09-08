@@ -34,14 +34,12 @@ class ListDetailFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(ListDetailViewModel::class.java)
 
-        val recyclerAdapter =
-            ListItemsRecyclerViewAdapter(viewModel.list)
+        val recyclerAdapter = ListItemsRecyclerViewAdapter(viewModel.list)
         binding.listItemsRecyclerview.adapter = recyclerAdapter
-        binding.listItemsRecyclerview.layoutManager =
-            LinearLayoutManager(requireContext())
+        binding.listItemsRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+
         viewModel.onTaskAdded = {
             recyclerAdapter.notifyDataSetChanged()
         }
     }
-
 }

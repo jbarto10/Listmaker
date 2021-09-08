@@ -32,10 +32,10 @@ SharedPreferences) : ViewModel() {
         onListAdded.invoke()
     }
     fun updateList(list: TaskList) {
-        sharedPreferences.edit().putStringSet(list.name,
-            list.tasks.toHashSet()).apply()
+        sharedPreferences.edit().putStringSet(list.name, list.tasks.toHashSet()).apply()
         lists.add(list)
     }
+
     fun refreshLists() {
         lists.clear()
         lists.addAll(retrieveLists())

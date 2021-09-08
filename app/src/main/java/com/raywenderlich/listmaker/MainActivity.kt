@@ -25,9 +25,11 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this,
+        viewModel = ViewModelProvider(
+            this,
 
-            MainViewModelFactory(PreferenceManager.getDefaultSharedPreferences(this)))
+            MainViewModelFactory(PreferenceManager.getDefaultSharedPreferences(this))
+        )
             .get(MainViewModel::class.java)
 
 
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             val mainFragment = MainFragment.newInstance(this)
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, mainFragment)
+                .replace(R.id.detail_container, mainFragment)
                 .commitNow()
         }
 
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity(),
             showCreateListDialog()
         }
     }
+
     private fun showCreateListDialog() {
         // 1
         val dialogTitle = getString(R.string.name_of_list)
@@ -60,7 +63,6 @@ class MainActivity : AppCompatActivity(),
         // 3
         builder.setPositiveButton(positiveButtonTitle) { dialog, _ ->
             dialog.dismiss()
-
             val taskList = TaskList(listTitleEditText.text.toString())
             viewModel.saveList(taskList)
             showListDetail(taskList)
@@ -68,20 +70,33 @@ class MainActivity : AppCompatActivity(),
         // 4
         builder.create().show()
     }
+
     private fun showListDetail(list: TaskList) {
-        val listDetailIntent = Intent(this, ListDetailActivity::class.java)
+        // 1
+        val listDetailIntent = Intent(
+            this,
+            ListDetailActivity::class.java
+        )
+        // 2
         listDetailIntent.putExtra(INTENT_LIST_KEY, list)
+        // 3
         startActivityForResult(listDetailIntent, LIST_DETAIL_REQUEST_CODE)
     }
 
     override fun listItemTapped(list: TaskList) {
         showListDetail(list)
     }
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+    override fun onActivityResult(
+        requestCode: Int, resultCode: Int,
+        data:
+        Intent?
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
         // 1
         if (requestCode == LIST_DETAIL_REQUEST_CODE && resultCode ==
-            Activity.RESULT_OK) {
+            Activity.RESULT_OK
+        ) {
             // 2
             data?.let {
                 // 3
@@ -91,8 +106,9 @@ class MainActivity : AppCompatActivity(),
             }
         }
     }
+
     companion object {
         const val INTENT_LIST_KEY = "list"
         const val LIST_DETAIL_REQUEST_CODE = 123
-            }
+    }
 }
