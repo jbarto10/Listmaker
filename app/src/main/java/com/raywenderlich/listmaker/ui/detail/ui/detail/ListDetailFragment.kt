@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.raywenderlich.listmaker.R
 import com.raywenderlich.listmaker.databinding.ListDetailFragmentBinding
 
@@ -32,7 +33,15 @@ class ListDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(ListDetailViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        val recyclerAdapter =
+            ListItemsRecyclerViewAdapter(viewModel.list)
+        binding.listItemsRecyclerview.adapter = recyclerAdapter
+        binding.listItemsRecyclerview.layoutManager =
+            LinearLayoutManager(requireContext())
+        viewModel.onTaskAdded = {
+            recyclerAdapter.notifyDataSetChanged()
+        }
     }
 
 }
