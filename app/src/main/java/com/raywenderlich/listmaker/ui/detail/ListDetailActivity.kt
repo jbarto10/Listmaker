@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.raywenderlich.listmaker.MainActivity
 import com.raywenderlich.listmaker.R
 import com.raywenderlich.listmaker.databinding.ListDetailActivityBinding
-import com.raywenderlich.listmaker.models.TaskList
 import com.raywenderlich.listmaker.ui.detail.ui.detail.ListDetailFragment
 import com.raywenderlich.listmaker.ui.detail.ui.detail.ListDetailViewModel
 
@@ -47,7 +46,6 @@ class ListDetailActivity : AppCompatActivity() {
         //1
         val taskEditText = EditText(this)
         taskEditText.inputType = InputType.TYPE_CLASS_TEXT
-
         //2
         AlertDialog.Builder(this)
             .setTitle(R.string.task_to_add)
@@ -64,10 +62,10 @@ class ListDetailActivity : AppCompatActivity() {
             .create()
             .show()
     }
-
     override fun onBackPressed() {
         val bundle = Bundle()
-        bundle.putParcelable(MainActivity.INTENT_LIST_KEY, viewModel.list)
+        bundle.putParcelable(MainActivity.INTENT_LIST_KEY,
+            viewModel.list)
 
         val intent = Intent()
         intent.putExtras(bundle)

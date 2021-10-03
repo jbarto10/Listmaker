@@ -2,11 +2,14 @@ package com.raywenderlich.listmaker
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Insets.add
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.raywenderlich.listmaker.databinding.MainActivityBinding
@@ -25,29 +28,38 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(
-            this,
 
-            MainViewModelFactory(PreferenceManager.getDefaultSharedPreferences(this))
-        )
+        viewModel = ViewModelProvider(this,
+            MainViewModelFactory(PreferenceManager.getDefaultSharedPreferences(this)))
             .get(MainViewModel::class.java)
-
 
         binding = MainActivityBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        Log.i("MainActivity", viewModel.toString())
 
         if (savedInstanceState == null) {
-            val mainFragment = MainFragment.newInstance(this)
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.detail_container, mainFragment)
-                .commitNow()
+            // 1
+            val mainFragment = MainFragment.newInstance()
+            mainFragment.clickListener = this
+            // 2
+            val fragmentContainerViewId: Int = if
+                    (binding.mainFragmentContainer == null) {
+                R.id.detail_container }
+            else { R.id.main_fragment_container }
+
+            // 3
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                add(fragmentContainerViewId, mainFragment)
+            }
         }
 
         binding.fabButton.setOnClickListener {
             showCreateListDialog()
         }
     }
+
 
     private fun showCreateListDialog() {
         // 1
@@ -73,10 +85,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun showListDetail(list: TaskList) {
         // 1
-        val listDetailIntent = Intent(
-            this,
-            ListDetailActivity::class.java
-        )
+        val listDetailIntent = Intent(this, ListDetailActivity::class.java)
         // 2
         listDetailIntent.putExtra(INTENT_LIST_KEY, list)
         // 3
@@ -87,16 +96,11 @@ class MainActivity : AppCompatActivity(),
         showListDetail(list)
     }
 
-    override fun onActivityResult(
-        requestCode: Int, resultCode: Int,
-        data:
-        Intent?
-    ) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // 1
         if (requestCode == LIST_DETAIL_REQUEST_CODE && resultCode ==
-            Activity.RESULT_OK
-        ) {
+            Activity.RESULT_OK) {
             // 2
             data?.let {
                 // 3

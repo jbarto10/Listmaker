@@ -5,7 +5,9 @@
     android:id="@+id/detail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail.ListDetailActivity" >
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp"
+    tools:context=".ListDetailActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_task_button"
@@ -13,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
         android:clickable="true"
-        android:src="@android:drawable/ic_menu_add" />
+        android:src="@android:drawable/ic_menu_add"
+        tools:ignore="SpeakableTextPresentCheck" />
 </FrameLayout>

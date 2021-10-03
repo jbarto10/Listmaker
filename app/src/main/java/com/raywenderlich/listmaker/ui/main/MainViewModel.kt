@@ -17,6 +17,7 @@ SharedPreferences) : ViewModel() {
     private fun retrieveLists(): MutableList<TaskList> {
         val sharedPreferencesContents = sharedPreferences.all
         val taskLists = ArrayList<TaskList>()
+
         for (taskList in sharedPreferencesContents) {
             val itemsHashSet = ArrayList(taskList.value as
                     HashSet<String>)
